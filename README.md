@@ -309,6 +309,7 @@ These are the kinds of prompts this skill is built to handle.
 
 ### Basic snapshot
 
+- 分析一下阿里/阿里巴巴/泡泡/快手
 - Analyze 0700 quickly
 - Give me a quick snapshot of Tencent
 - 0005 现在大概是什么情况，先简版
