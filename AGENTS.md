@@ -19,7 +19,8 @@ Current market fields include:
 2. Provider priority:
 * configured broker or market-data connector such as Longbridge, Futu, or IBKR
 * reputable public market-data source
-* web search with freshness labeling
+* Tier 1 web search: 新浪财经, 同花顺, 雪球, 东方财富, Yahoo Finance, Reuters, Bloomberg
+* Tier 2 web search: ProSearch (online-search skill) with strict verification
 
 3. Use `Finlens-hk-stock-analysis-oss` for analytical structure, valuation framing, thesis building, ownership and positioning work, risk analysis, and report generation.
 
@@ -39,12 +40,32 @@ Prefer:
 6. If no configured provider is available, state that clearly and label the market data as live, delayed, end of day, or last available.
 Do not present stale quote data as fully current.
 
+**Web search fallback hierarchy:**
+- Tier 1: curated financial websites (sina, 10jqka, xueqiu, eastmoney, yahoo finance, reuters, bloomberg)
+- Tier 2: ProSearch (online-search skill) with strict verification
+- If all fail: explain to user and request data
+
+7. Separate live market data from filings and ownership data in the final answer.
+Label which numbers came from:
+* configured provider data
+* public market-data source
+* web-sourced data (Tier 1 or Tier 2)
+* filings and corporate disclosures
+* ownership and positioning sources
+
+**Data source labeling format:**
+```
+[Data Type]: [Value]
+Source: [Source type] | [URL if web-sourced] | [Date]
+Freshness: [Live/Delayed/EOD/Last available] | [Tier 1/Tier 2 if web-sourced]
+```
+
 ## Execution order for stock analysis
 
 1. Resolve entity to the correct Hong Kong ticker
 2. Resolve the best available market-data provider
-3. Fetch market data and label freshness
-4. Fetch filings and company materials
-5. Fetch ownership and positioning data when relevant
+3. Fetch market data and label freshness (use Tier 1/Tier 2 fallback if needed)
+4. Fetch filings and company materials (primary sources, with web search fallback)
+5. Fetch ownership and positioning data when relevant (official sources, with web search fallback)
 6. Run the Finlens analysis workflow
 7. In the output, label freshness and source type clearly

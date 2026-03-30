@@ -108,6 +108,78 @@ Do not use them as the sole basis for core financial numbers when primary source
 
 If multiple sources disagree, state that clearly and prefer the most primary and most recent source for that data type.
 
+### 5. Web Search Fallback Layer
+
+When required data is unavailable from all primary and secondary sources above:
+
+**Trigger conditions:**
+- Data is necessary for the analysis
+- All preferred sources have been exhausted
+- User has requested analysis and cannot provide the data directly
+
+**Search hierarchy (in order):**
+
+#### Tier 1: Curated Financial Websites (Preferred)
+
+Search these authoritative financial websites first:
+- **CN**: 新浪财经 (finance.sina.com.cn), 同花顺 (10jqka.com.cn), 雪球 (xueqiu.com), 东方财富 (eastmoney.com), 网易财经 (money.163.com)
+- **EN**: Yahoo Finance (finance.yahoo.com), Reuters (reuters.com), Bloomberg (bloomberg.com), FT (ft.com)
+
+**Search strategy for Tier 1:**
+1. For CN sites: `site:sina.com.cn OR site:10jqka.com.cn OR site:xueqiu.com OR site:eastmoney.com "<company name>" "annual report" OR "年报"`
+2. For EN sites: `site:finance.yahoo.com OR site:reuters.com "<stock code>" "annual report"`
+3. Verify data matches the reporting period
+
+**Verification requirements:**
+- [ ] Source is from the curated list above
+- [ ] Data includes date/period information
+- [ ] Data is recent enough (within 3 months for financial data)
+- [ ] Cross-check key numbers if multiple sources available
+- [ ] Source URL recorded for citation
+
+#### Tier 2: ProSearch (Final Fallback)
+
+If all Tier 1 sites return no results, use ProSearch as the final fallback:
+- Use online-search skill for general search
+- Requires stricter verification (see below)
+
+**ProSearch fallback trigger:**
+- All Tier 1 sites have no relevant data
+- Or Tier 1 data quality is questionable
+
+**Verification checklist for ProSearch:**
+- [ ] Source is from reputable news outlet (not unverified blog or social media)
+- [ ] Data includes clear date/period
+- [ ] Multiple independent sources corroborate the key numbers
+- [ ] If sources conflict, state the discrepancy clearly
+- [ ] Source URL recorded
+
+**Verification checklist before using web-sourced data (both tiers):**
+- [ ] Source is from Tier 1 list OR verified ProSearch result
+- [ ] Data includes date/period information
+- [ ] Data is recent enough for the analysis context
+- [ ] If multiple sources exist, they agree on the key numbers
+- [ ] Source URL is recorded for citation
+
+**Output requirements:**
+- [ ] Clearly label data as "web-sourced (Tier 1)" or "web-sourced (ProSearch)"
+- [ ] Include source URL and publication date
+- [ ] Note any data freshness concerns
+- [ ] If data quality is uncertain, state that explicitly
+
+### Data Source Disagreement Protocol
+
+If multiple sources disagree on the same data point:
+
+1. State clearly that sources disagree
+2. Prefer the most primary and most recent source
+3. Show the range of values from different sources
+4. Explain why the preferred source is more reliable
+5. Do not present uncertain data as fact
+
+Example:
+> "Revenue for FY2025: Official HKEX filing shows 8.886B HKD, but third-party aggregator shows 1.49B HKD. Using HKEX filing as primary source. The discrepancy may reflect different accounting treatments or data entry errors in the aggregator."
+
 ## Freshness Contract
 
 For any Hong Kong stock request involving current market context, resolve the best available market-data provider before analysis.
@@ -125,10 +197,16 @@ If a configured provider is available, use it first for:
 
 If no configured provider is available:
 
-1. use a reputable public source or web search
-2. label the freshness clearly
-3. state whether the data is live, delayed, end of day, or last available
-4. do not present stale quote data as fully current
+1. use a reputable public source or Tier 1 web search (curated financial websites)
+2. if Tier 1 returns no results, use Tier 2 ProSearch with strict verification
+3. label the freshness clearly and note the source tier
+4. state whether the data is live, delayed, end of day, or last available
+5. do not present stale quote data as fully current
+
+**Web search fallback hierarchy:**
+- Tier 1: 新浪财经, 同花顺, 雪球, 东方财富, Yahoo Finance, Reuters, Bloomberg
+- Tier 2: ProSearch (online-search skill)
+- If all fail: explain to user and request data
 
 ## Data to Gather
 

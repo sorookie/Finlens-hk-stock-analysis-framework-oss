@@ -6,6 +6,37 @@ Finlens HK Stock Analysis OSS is a provider-aware research skill for analyzing H
 
 This open-source version does not assume any private broker or local connector is available. If the user has configured a market-data provider such as Longbridge, Futu, or IBKR, the workflow can use it first. Otherwise, it falls back to official disclosures, reputable public market-data sources, and web search with explicit freshness labeling.
 
+## Table of contents
+
+- [Why this exists](#why-this-exists)
+- [What this skill does](#what-this-skill-does)
+- [Typical use cases](#typical-use-cases)
+- [How Finlens thinks about data](#how-finlens-thinks-about-data)
+- [Data routing logic](#data-routing-logic)
+- [Analysis modes](#analysis-modes)
+- [Quick start](#quick-start)
+- [Configuration](#configuration)
+- [Example requests](#example-requests)
+- [Output style](#output-style)
+- [Repository structure](#repository-structure)
+- [Limitations](#limitations)
+
+## Why this exists
+
+Most stock-analysis prompts collapse everything into one bucket and mix stale price data, company filings, chart commentary, market rumors, and positioning interpretation into a single answer.
+
+Finlens is built to avoid that.
+
+It separates:
+
+- market data from filings
+- ownership flow from net short inventory
+- facts from interpretation
+- quick answers from full research notes
+- provider-backed data from public fallback data
+
+The goal is not to generate generic stock opinions. The goal is to produce structured, source-aware, time-aware Hong Kong stock analysis.
+
 ## What this skill does
 
 This skill is designed for Hong Kong stock research with a structured, repeatable workflow.
@@ -37,7 +68,7 @@ Use this framework when you want to answer questions such as:
 - Which stock looks more attractive between two Hong Kong names?
 - Can I generate a full structured investment note instead of a quick opinion?
 
-## Core design principles
+## How Finlens thinks about data
 
 Finlens separates facts from interpretation.
 
@@ -309,7 +340,6 @@ These are the kinds of prompts this skill is built to handle.
 
 ### Basic snapshot
 
-- 分析一下阿里/阿里巴巴/泡泡/快手
 - Analyze 0700 quickly
 - Give me a quick snapshot of Tencent
 - 0005 现在大概是什么情况，先简版
@@ -383,28 +413,28 @@ General output rules:
 
 ### File guide
 
-- `README.md`  
+- `README.md`
   Project overview, installation, usage, and examples.
 
-- `SKILL.md`  
+- `SKILL.md`
   The main open-source stock analysis skill. Defines scope, routing expectations, analysis modes, and output rules.
 
-- `AGENTS.md`  
+- `AGENTS.md`
   Repository-level routing rules. Defines provider priority, execution order, and source discipline.
 
-- `references/fundamental-analysis.md`  
+- `references/fundamental-analysis.md`
   Framework for business quality, financial health, valuation framing, shareholder return quality, risks, and red flags.
 
-- `references/financial-metrics.md`  
+- `references/financial-metrics.md`
   Metric definitions and interpretation rules.
 
-- `references/ownership-positioning.md`  
+- `references/ownership-positioning.md`
   Framework for southbound, short-selling flow, weekly short inventory, buybacks, and optional CCASS-style analysis.
 
-- `references/technical-analysis.md`  
+- `references/technical-analysis.md`
   Framework for trend, momentum, support and resistance, volume confirmation, and invalidation logic.
 
-- `references/report-template.md`  
+- `references/report-template.md`
   Template for full stock reports and comparison reports.
 
 ## Limitations
