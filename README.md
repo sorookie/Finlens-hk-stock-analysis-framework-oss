@@ -283,6 +283,7 @@ Your project should look like this:
         └── finlens-oss
             ├── SKILL.md
             └── references
+                ├── ccass-query-guide.md
                 ├── financial-metrics.md
                 ├── fundamental-analysis.md
                 ├── ownership-positioning.md
