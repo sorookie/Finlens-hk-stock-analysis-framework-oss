@@ -5,6 +5,31 @@ description: Analyze Hong Kong listed stocks and ETFs with a structured research
 
 # Finlens HK Stock Analysis OSS
 
+## Pre-Execution Checklist (MANDATORY — run before any output)
+
+Before generating any output, explicitly verify:
+
+**[ ] 1. Language check**
+- What language did the user use? → Output in that language. No exceptions.
+
+**[ ] 2. Data source routing**
+| Data Type | Primary Source | Fallback |
+|:---|:---|:---|
+| Market data | Configured provider (Longbridge/Futu/IBKR) | Tier 1 web search |
+| Financials | HKEX official filing | Tier 1 web search |
+| Ownership | HKEX / SFC official | Tier 1 web search |
+
+⚠️ NEVER use third-party aggregators as primary source for core financial numbers.
+
+**[ ] 3. Time context check**
+- For every financial metric from an API: verify `dateGranularity = FISCAL_YEAR` for annual data
+- NEVER use `QUARTER` or `TTM` data as annual report figures
+- Always check `startDate` and `endDate` fields
+
+**[ ] 4. Connector status declaration**
+- If configured provider fails → state this in the **FIRST LINE** of output
+- Label every data point with its actual source
+
 ## Scope
 
 This open-source skill is for general Hong Kong stock research with provider aware routing.
@@ -96,11 +121,17 @@ Prefer primary sources:
 ### 3. Ownership and positioning data
 Prefer official and disclosed sources:
 
-* southbound and Stock Connect statistics
-* HKEX daily short-selling turnover
-* SFC aggregated reportable short positions
-* buyback disclosures and dividend schedules
-* optional local CCASS connector only when the user enables it for personal use
+* southbound and Stock Connect statistics — ✅ available via configured provider or web search
+* HKEX daily short-selling turnover — ✅ available via web search
+* SFC aggregated reportable short positions — ✅ available via SFC website
+* buyback disclosures and dividend schedules — ✅ available via HKEX filings
+* CCASS participant shareholding — ⚠️ **requires manual HKEX query** (see `references/ccass-query-guide.md`)
+
+**CCASS Data Limitation:**
+- Longbridge/Futu/IBKR CLI do not support CCASS data
+- HKEX CCASS requires manual interactive query
+- When CCASS data is needed, read `references/ccass-query-guide.md` for manual query instructions
+- Alternatively, ask user to provide CCASS data for analysis
 
 ### 4. Financial context and consensus framing
 Use high quality financial media and research summaries only for recent developments, market framing, and context.
@@ -385,7 +416,7 @@ Workflow:
 
 ### Reasoning Discipline
 
-When making a judgment, explain which of these buckets it comes from:
+When making a judgment, **must explicitly state** which of these buckets it comes from:
 
 * reported financial evidence
 * market pricing evidence
@@ -396,6 +427,8 @@ When making a judgment, explain which of these buckets it comes from:
 * shareholder return evidence
 * market consensus context
 
+**Do NOT present interpretations as facts.** Every key claim must have a clear source attribution.
+
 ### Recommendation Discipline
 
 If providing a recommendation or target price:
@@ -405,6 +438,9 @@ If providing a recommendation or target price:
 * state major assumptions
 * mention what would change the view
 * avoid sounding certain when the evidence is mixed
+* **state confidence level explicitly when data is from fallback sources (Tier 1/Tier 2 web search)**
+
+If data quality is uncertain or primary sources are unavailable, consider withholding rating and stating limitations instead.
 
 ## Reference Files
 
@@ -420,7 +456,10 @@ Use for ratio definitions, interpretation, and metric selection.
 Use for indicator interpretation, chart structure, support resistance, and technical workflow.
 
 **references/ownership-positioning.md**
-Use for southbound holding trend, daily short-selling turnover, weekly aggregated reportable short positions, buyback absorption, and positioning conclusions. Use optional CCASS participant data only when a local connector is enabled.
+Use for southbound holding trend, daily short-selling turnover, weekly aggregated reportable short positions, buyback absorption, and positioning conclusions.
+
+**references/ccass-query-guide.md**
+Use when CCASS data is needed. Provides manual query instructions for HKEX CCASS website. No automated API available — this guide shows how to manually obtain and format CCASS data for analysis.
 
 **references/report-template.md**
 Use for full reports and comparison reports.
